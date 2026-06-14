@@ -4,14 +4,14 @@
 
 #[cfg(windows)]
 mod imp {
-    use windows::Win32::Foundation::{BOOL, HWND, LPARAM, WPARAM};
+    use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
     use windows::Win32::UI::WindowsAndMessaging::{
         EnumWindows, FindWindowExW, FindWindowW, GetWindowLongPtrW, SendMessageTimeoutW,
         SetParent, SetWindowLongPtrW, SetWindowPos, GWL_EXSTYLE, GWL_STYLE, HWND_BOTTOM,
         SMTO_NORMAL, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, WS_CHILD, WS_EX_LAYERED,
         WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TRANSPARENT, WS_POPUP,
     };
-    use windows::core::{w, PCWSTR};
+    use windows::core::{w, BOOL, PCWSTR};
 
     fn hwnd_from(raw: isize) -> HWND {
         HWND(raw as *mut core::ffi::c_void)
@@ -85,8 +85,8 @@ mod imp {
             let _ = SendMessageTimeoutW(
                 progman,
                 0x052C,
-                Some(WPARAM(0)),
-                Some(LPARAM(0)),
+                WPARAM(0),
+                LPARAM(0),
                 SMTO_NORMAL,
                 1000,
                 Some(&mut result as *mut usize),
