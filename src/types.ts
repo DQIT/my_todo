@@ -51,8 +51,6 @@ export interface Settings {
   backgroundColor: string;
   /** 背景透明度 0-100，0 全透明，100 实色 */
   backgroundOpacity: number;
-  /** 背景高斯模糊半径 px，0 为不模糊 */
-  backgroundBlur: number;
   /** 开机启动 */
   autostart: boolean;
   /** 启动后最小化到托盘 */
@@ -89,7 +87,6 @@ export const DEFAULT_SETTINGS: Settings = {
   desktopLocked: true,
   backgroundColor: "#14161c",
   backgroundOpacity: 0,
-  backgroundBlur: 0,
   autostart: false,
   startMinimized: false,
   fontSize: 16,

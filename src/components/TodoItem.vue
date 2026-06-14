@@ -39,78 +39,85 @@ function commitEdit() {
 </script>
 
 <template>
-  <!-- 编辑态：独立纵向布局，按钮单独成行，不与复选框/操作区挤占 -->
-  <div v-if="editing" class="item edit-mode">
-    <input
-      ref="contentInput"
-      v-model="editContent"
-      class="edit-input"
-      :maxlength="MAX_CONTENT_LENGTH"
-      placeholder="事项内容"
-      @keydown.enter="commitEdit"
-      @keydown.esc="editing = false"
-    />
-    <div class="edit-row">
-      <input v-model="editTime" class="edit-input time" type="datetime-local" />
-      <div class="edit-actions">
-        <button class="btn-sm ghost" @click="editing = false">取消</button>
-        <button class="btn-sm primary" @click="commitEdit">保存</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 常规态 -->
+  <!-- 单一稳定根节点：编辑态/常规态只切换内部内容，根 DOM 不被替换，
+       避免在 TransitionGroup 中触发离场动画导致取消时整条瞬时消失（#1） -->
   <div
-    v-else
     class="item"
-    :class="{ done: todo.status === 'done', expired }"
-    @dblclick="startEdit"
+    :class="{
+      done: todo.status === 'done',
+      expired: expired && !editing,
+      'edit-mode': editing,
+    }"
+    @dblclick="!editing && startEdit()"
   >
-    <!-- 复选框 -->
-    <button
-      class="check"
-      :class="{ checked: todo.status === 'done' }"
-      :title="todo.status === 'done' ? '恢复为未完成' : '标记完成'"
-      @click="emit('toggle')"
-    >
-      <svg v-if="todo.status === 'done'" width="12" height="12" viewBox="0 0 12 12">
-        <path d="M2.5 6.2 L5 8.5 L9.5 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-
-    <!-- 内容 -->
-    <div class="body">
-      <div class="text">{{ todo.content }}</div>
-      <div class="meta">
-        <svg width="12" height="12" viewBox="0 0 12 12" class="clock">
-          <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1" fill="none" />
-          <path d="M6 3.5 V6 L7.8 7.2" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round" />
-        </svg>
-        <span>{{ timeText }}</span>
-        <span v-if="expired" class="badge">已过期</span>
+    <!-- 编辑态：纵向布局，按钮单独成行 -->
+    <template v-if="editing">
+      <input
+        ref="contentInput"
+        v-model="editContent"
+        class="edit-input"
+        :maxlength="MAX_CONTENT_LENGTH"
+        placeholder="事项内容"
+        @keydown.enter="commitEdit"
+        @keydown.esc="editing = false"
+      />
+      <div class="edit-row">
+        <input v-model="editTime" class="edit-input time" type="datetime-local" />
+        <div class="edit-actions">
+          <button class="btn-sm ghost" @click="editing = false">取消</button>
+          <button class="btn-sm primary" @click="commitEdit">保存</button>
+        </div>
       </div>
-    </div>
+    </template>
 
-    <!-- 操作区 -->
-    <div class="ops" v-if="!confirming">
-      <button v-if="todo.status === 'pending'" class="iconbtn" title="编辑" @click="startEdit">
-        <svg width="14" height="14" viewBox="0 0 14 14">
-          <path d="M9.5 2.5 L11.5 4.5 L5 11 L2.5 11.5 L3 9 Z" stroke="currentColor" stroke-width="1.1" fill="none" stroke-linejoin="round" />
+    <!-- 常规态 -->
+    <template v-else>
+      <!-- 复选框 -->
+      <button
+        class="check"
+        :class="{ checked: todo.status === 'done' }"
+        :title="todo.status === 'done' ? '恢复为未完成' : '标记完成'"
+        @click="emit('toggle')"
+      >
+        <svg v-if="todo.status === 'done'" width="12" height="12" viewBox="0 0 12 12">
+          <path d="M2.5 6.2 L5 8.5 L9.5 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
-      <button class="iconbtn danger" title="删除" @click="confirming = true">
-        <svg width="14" height="14" viewBox="0 0 14 14">
-          <path d="M3 4 H11 M5.5 4 V2.5 H8.5 V4 M4 4 L4.5 11.5 H9.5 L10 4" stroke="currentColor" stroke-width="1.1" fill="none" stroke-linejoin="round" />
-        </svg>
-      </button>
-    </div>
 
-    <!-- 删除二次确认 -->
-    <div class="ops confirm" v-else>
-      <span class="confirm-text">永久删除？</span>
-      <button class="iconbtn danger solid" @click="emit('remove')">删除</button>
-      <button class="iconbtn" @click="confirming = false">取消</button>
-    </div>
+      <!-- 内容 -->
+      <div class="body">
+        <div class="text">{{ todo.content }}</div>
+        <div class="meta">
+          <svg width="12" height="12" viewBox="0 0 12 12" class="clock">
+            <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1" fill="none" />
+            <path d="M6 3.5 V6 L7.8 7.2" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round" />
+          </svg>
+          <span>{{ timeText }}</span>
+          <span v-if="expired" class="badge">已过期</span>
+        </div>
+      </div>
+
+      <!-- 操作区 -->
+      <div class="ops" v-if="!confirming">
+        <button v-if="todo.status === 'pending'" class="iconbtn" title="编辑" @click="startEdit">
+          <svg width="14" height="14" viewBox="0 0 14 14">
+            <path d="M9.5 2.5 L11.5 4.5 L5 11 L2.5 11.5 L3 9 Z" stroke="currentColor" stroke-width="1.1" fill="none" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button class="iconbtn danger" title="删除" @click="confirming = true">
+          <svg width="14" height="14" viewBox="0 0 14 14">
+            <path d="M3 4 H11 M5.5 4 V2.5 H8.5 V4 M4 4 L4.5 11.5 H9.5 L10 4" stroke="currentColor" stroke-width="1.1" fill="none" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 删除二次确认 -->
+      <div class="ops confirm" v-else>
+        <span class="confirm-text">永久删除？</span>
+        <button class="iconbtn danger solid" @click="emit('remove')">删除</button>
+        <button class="iconbtn" @click="confirming = false">取消</button>
+      </div>
+    </template>
   </div>
 </template>
 

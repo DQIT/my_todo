@@ -28,8 +28,6 @@ pub struct Settings {
     pub background_color: String,
     #[serde(rename = "backgroundOpacity")]
     pub background_opacity: u32,
-    #[serde(rename = "backgroundBlur", default)]
-    pub background_blur: u32,
     pub autostart: bool,
     #[serde(rename = "startMinimized")]
     pub start_minimized: bool,
@@ -57,7 +55,6 @@ impl Default for Settings {
             desktop_locked: true,
             background_color: default_bg_color(),
             background_opacity: 0,
-            background_blur: 0,
             autostart: false,
             start_minimized: false,
             font_size: 16,

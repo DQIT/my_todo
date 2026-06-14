@@ -37,7 +37,6 @@ const textLuminance = computed(() => {
 const isLightText = computed(() => textLuminance.value >= 140);
 
 // 面板背景：用户选定的背景色 + 透明度(0-100 → alpha)。0 时纯浮动文字（贴合壁纸概念）。
-// 高斯模糊作用于背景层（backdrop-filter），透出底层壁纸的磨砂质感。
 function hexToRgb(hex: string): string {
   const h = hex.replace("#", "");
   const r = parseInt(h.slice(0, 2), 16) || 0;
@@ -48,12 +47,8 @@ function hexToRgb(hex: string): string {
 const panelStyle = computed(() => {
   const a = settings.backgroundOpacity / 100;
   const rgb = hexToRgb(settings.backgroundColor);
-  const blur = settings.backgroundBlur;
-  const filter = blur > 0 ? `blur(${blur}px)` : "none";
   return {
     background: `rgba(${rgb}, ${a})`,
-    backdropFilter: filter,
-    WebkitBackdropFilter: filter,
   };
 });
 
@@ -233,6 +228,11 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 10px;
   overflow: hidden;
+}
+/* 解锁态：行内容不拦截鼠标，使任意位置的按下都落到 .panel 的
+   拖拽热区上，避免点在文字上无法拖动（#3） */
+.panel.unlocked .rows {
+  pointer-events: none;
 }
 .item {
   display: flex;

@@ -99,17 +99,6 @@ async function onThemeChange(v: ThemeMode) {
       </div>
 
       <div class="row">
-        <div class="label">
-          <span>高斯模糊</span>
-          <small>{{ settings.backgroundBlur }}px · 透出壁纸磨砂质感</small>
-        </div>
-        <input
-          type="range" min="0" max="40" class="range"
-          v-model.number="settings.backgroundBlur" @change="save"
-        />
-      </div>
-
-      <div class="row">
         <div class="label"><span>字体大小</span><small>{{ settings.fontSize }}px</small></div>
         <input
           type="range" min="12" max="32" class="range"
