@@ -102,16 +102,13 @@ pub fn apply_desktop_visibility(app: &AppHandle, enabled: bool) {
     };
     if enabled {
         let _ = w.show();
+        // 压到底层
         if let Ok(hwnd) = w.hwnd() {
-            let raw = hwnd.0 as isize;
-            // 尽力嵌入壁纸层；失败则退化为始终置底
-            if !desktop::embed_in_wallpaper(raw) {
-                desktop::pin_to_bottom(raw);
-            }
-            // 应用当前锁定状态
-            let locked = current_locked(app);
-            desktop::set_click_through(raw, locked);
+            desktop::pin_to_bottom(hwnd.0 as isize);
         }
+        // 应用当前锁定状态（穿透）
+        let locked = current_locked(app);
+        let _ = w.set_ignore_cursor_events(locked);
     } else {
         let _ = w.hide();
     }
@@ -120,9 +117,8 @@ pub fn apply_desktop_visibility(app: &AppHandle, enabled: bool) {
 
 pub fn apply_desktop_lock(app: &AppHandle, locked: bool) {
     if let Some(w) = app.get_webview_window("desktop") {
-        if let Ok(hwnd) = w.hwnd() {
-            desktop::set_click_through(hwnd.0 as isize, locked);
-        }
+        // 锁定 = 鼠标穿透；解锁 = 接收鼠标事件（可拖拽/缩放）
+        let _ = w.set_ignore_cursor_events(locked);
     }
     let store = app.state::<Store>();
     let mut guard = store.0.lock().unwrap();

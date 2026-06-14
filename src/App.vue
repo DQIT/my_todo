@@ -37,26 +37,28 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <TitleBar />
-  <nav class="tabbar">
-    <button
-      v-for="t in tabs"
-      :key="t.key"
-      class="tab"
-      :class="{ active: tab === t.key }"
-      @click="tab = t.key"
-    >
-      {{ t.label }}
-      <span class="indicator" v-if="tab === t.key" />
-    </button>
-  </nav>
-  <main class="content">
-    <Transition name="fade" mode="out-in">
-      <TasksPanel v-if="tab === 'tasks'" key="tasks" />
-      <SettingsPanel v-else-if="tab === 'settings'" key="settings" />
-      <AboutPanel v-else key="about" />
-    </Transition>
-  </main>
+  <div class="app-shell">
+    <TitleBar />
+    <nav class="tabbar">
+      <button
+        v-for="t in tabs"
+        :key="t.key"
+        class="tab"
+        :class="{ active: tab === t.key }"
+        @click="tab = t.key"
+      >
+        {{ t.label }}
+        <span class="indicator" v-if="tab === t.key" />
+      </button>
+    </nav>
+    <main class="content">
+      <Transition name="fade" mode="out-in">
+        <TasksPanel v-if="tab === 'tasks'" key="tasks" />
+        <SettingsPanel v-else-if="tab === 'settings'" key="settings" />
+        <AboutPanel v-else key="about" />
+      </Transition>
+    </main>
+  </div>
 </template>
 
 <style scoped>

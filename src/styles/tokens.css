@@ -36,26 +36,26 @@
 /* 暗色主题（默认） */
 :root,
 :root[data-theme="dark"] {
-  --bg-window: rgba(28, 28, 34, 0.72);
+  --bg-window: #1e1e24;
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.08);
   --text-primary: #f2f3f5;
   --text-secondary: rgba(242, 243, 245, 0.6);
   --text-disabled: rgba(242, 243, 245, 0.35);
   --border: rgba(255, 255, 255, 0.1);
-  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.45);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 :root[data-theme="light"] {
-  --bg-window: rgba(250, 250, 252, 0.78);
+  --bg-window: #f7f7fa;
   --bg-card: rgba(0, 0, 0, 0.03);
   --bg-card-hover: rgba(0, 0, 0, 0.06);
   --text-primary: #1c1c22;
   --text-secondary: rgba(28, 28, 34, 0.55);
   --text-disabled: rgba(28, 28, 34, 0.35);
   --border: rgba(0, 0, 0, 0.08);
-  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.18);
+  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.22);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
   --accent: #2f6fe0;
 }
@@ -80,19 +80,26 @@ body {
   text-rendering: optimizeLegibility;
   user-select: none;
   overflow: hidden;
+  background: transparent;
 }
 
-/* 主界面窗体：玻璃面板 */
+/* 主界面窗体：不透明实色卡片 + 圆角 + CSS 阴影。
+   窗口本身透明，留一圈 padding 供阴影渲染，避免出现透明直角轮廓。 */
 #app {
   height: 100vh;
+  padding: 10px;
+  display: flex;
+}
+#app > .app-shell {
+  flex: 1;
   background: var(--bg-window);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border-radius: var(--radius-window);
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-window);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 /* 桌面悬浮层 body 完全透明 */
