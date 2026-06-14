@@ -2,8 +2,8 @@
 
 use tauri::{
     menu::{Menu, MenuItem},
-    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-    AppHandle, Manager,
+    tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
+    AppHandle,
 };
 
 use crate::commands;
@@ -32,7 +32,6 @@ pub fn build(app: &AppHandle) -> tauri::Result<()> {
             // 双击呼出主界面
             if let TrayIconEvent::DoubleClick {
                 button: MouseButton::Left,
-                button_state: MouseButtonState::Up,
                 ..
             } = event
             {

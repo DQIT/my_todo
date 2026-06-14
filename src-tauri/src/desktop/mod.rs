@@ -4,7 +4,7 @@
 
 #[cfg(windows)]
 mod imp {
-    use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
+    use windows::Win32::Foundation::{BOOL, HWND, LPARAM, WPARAM};
     use windows::Win32::UI::WindowsAndMessaging::{
         EnumWindows, FindWindowExW, FindWindowW, GetWindowLongPtrW, SendMessageTimeoutW,
         SetParent, SetWindowLongPtrW, SetWindowPos, GWL_EXSTYLE, GWL_STYLE, HWND_BOTTOM,
@@ -57,7 +57,7 @@ mod imp {
     // 之后的 WorkerW 窗口；我们枚举找到那个 WorkerW，将自身 SetParent 进去。
     static mut WORKERW: HWND = HWND(std::ptr::null_mut());
 
-    unsafe extern "system" fn enum_proc(top: HWND, _l: LPARAM) -> windows::core::BOOL {
+    unsafe extern "system" fn enum_proc(top: HWND, _l: LPARAM) -> BOOL {
         let shell = FindWindowExW(Some(top), None, w!("SHELLDLL_DefView"), PCWSTR::null());
         if let Ok(sh) = shell {
             if !sh.0.is_null() {
