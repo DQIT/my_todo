@@ -32,13 +32,27 @@ export const TEXT_COLOR_PRESETS: { name: string; value: string }[] = [
   { name: "丁香紫", value: "#b69bff" },
 ];
 
+/** 桌面层背景颜色预设 */
+export const BG_COLOR_PRESETS: { name: string; value: string }[] = [
+  { name: "石墨黑", value: "#14161c" },
+  { name: "午夜蓝", value: "#16203a" },
+  { name: "深林绿", value: "#15241d" },
+  { name: "酒红", value: "#2a1518" },
+  { name: "暖砂", value: "#f4efe6" },
+  { name: "云白", value: "#f7f8fc" },
+];
+
 export interface Settings {
   /** 桌面悬浮层显示总开关 */
   desktopEnabled: boolean;
   /** 桌面层锁定（鼠标穿透）状态 */
   desktopLocked: boolean;
+  /** 背景颜色（十六进制） */
+  backgroundColor: string;
   /** 背景透明度 0-100，0 全透明，100 实色 */
   backgroundOpacity: number;
+  /** 背景高斯模糊半径 px，0 为不模糊 */
+  backgroundBlur: number;
   /** 开机启动 */
   autostart: boolean;
   /** 启动后最小化到托盘 */
@@ -73,7 +87,9 @@ export interface AppState {
 export const DEFAULT_SETTINGS: Settings = {
   desktopEnabled: false,
   desktopLocked: true,
+  backgroundColor: "#14161c",
   backgroundOpacity: 0,
+  backgroundBlur: 0,
   autostart: false,
   startMinimized: false,
   fontSize: 16,

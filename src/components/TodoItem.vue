@@ -39,7 +39,29 @@ function commitEdit() {
 </script>
 
 <template>
+  <!-- 编辑态：独立纵向布局，按钮单独成行，不与复选框/操作区挤占 -->
+  <div v-if="editing" class="item edit-mode">
+    <input
+      ref="contentInput"
+      v-model="editContent"
+      class="edit-input"
+      :maxlength="MAX_CONTENT_LENGTH"
+      placeholder="事项内容"
+      @keydown.enter="commitEdit"
+      @keydown.esc="editing = false"
+    />
+    <div class="edit-row">
+      <input v-model="editTime" class="edit-input time" type="datetime-local" />
+      <div class="edit-actions">
+        <button class="btn-sm ghost" @click="editing = false">取消</button>
+        <button class="btn-sm primary" @click="commitEdit">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 常规态 -->
   <div
+    v-else
     class="item"
     :class="{ done: todo.status === 'done', expired }"
     @dblclick="startEdit"
@@ -57,7 +79,7 @@ function commitEdit() {
     </button>
 
     <!-- 内容 -->
-    <div class="body" v-if="!editing">
+    <div class="body">
       <div class="text">{{ todo.content }}</div>
       <div class="meta">
         <svg width="12" height="12" viewBox="0 0 12 12" class="clock">
@@ -69,21 +91,8 @@ function commitEdit() {
       </div>
     </div>
 
-    <!-- 编辑态 -->
-    <div class="body editing" v-else>
-      <input
-        ref="contentInput"
-        v-model="editContent"
-        class="edit-input"
-        :maxlength="MAX_CONTENT_LENGTH"
-        @keydown.enter="commitEdit"
-        @keydown.esc="editing = false"
-      />
-      <input v-model="editTime" class="edit-input time" type="datetime-local" />
-    </div>
-
     <!-- 操作区 -->
-    <div class="ops" v-if="!editing && !confirming">
+    <div class="ops" v-if="!confirming">
       <button v-if="todo.status === 'pending'" class="iconbtn" title="编辑" @click="startEdit">
         <svg width="14" height="14" viewBox="0 0 14 14">
           <path d="M9.5 2.5 L11.5 4.5 L5 11 L2.5 11.5 L3 9 Z" stroke="currentColor" stroke-width="1.1" fill="none" stroke-linejoin="round" />
@@ -94,12 +103,6 @@ function commitEdit() {
           <path d="M3 4 H11 M5.5 4 V2.5 H8.5 V4 M4 4 L4.5 11.5 H9.5 L10 4" stroke="currentColor" stroke-width="1.1" fill="none" stroke-linejoin="round" />
         </svg>
       </button>
-    </div>
-
-    <!-- 编辑确认 -->
-    <div class="ops" v-else-if="editing">
-      <button class="iconbtn ok" title="保存" @click="commitEdit">✓</button>
-      <button class="iconbtn" title="取消" @click="editing = false">✕</button>
     </div>
 
     <!-- 删除二次确认 -->
@@ -182,8 +185,17 @@ function commitEdit() {
   padding: 1px 6px;
   font-size: 11px;
 }
-.editing {
+/* 编辑态：整块纵向布局 */
+.item.edit-mode {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-2);
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+}
+.edit-row {
   display: flex;
+  align-items: center;
   gap: var(--sp-2);
 }
 .edit-input {
@@ -191,13 +203,46 @@ function commitEdit() {
   border: 1px solid var(--accent);
   border-radius: var(--radius-btn);
   color: var(--text-primary);
-  padding: 4px var(--sp-2);
+  padding: 6px var(--sp-2);
   font-size: 14px;
   outline: none;
-  flex: 1;
+  width: 100%;
 }
 .edit-input.time {
-  flex: 0 0 180px;
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+.edit-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+.btn-sm {
+  height: 32px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--radius-btn);
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--dur-hover) var(--ease);
+  white-space: nowrap;
+}
+.btn-sm.primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-sm.primary:hover {
+  background: var(--accent-hover);
+}
+.btn-sm.ghost {
+  background: none;
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+.btn-sm.ghost:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
 }
 .ops {
   display: flex;
@@ -207,8 +252,7 @@ function commitEdit() {
   transition: opacity var(--dur-hover) var(--ease);
   flex-shrink: 0;
 }
-.ops.confirm,
-.editing ~ .ops {
+.ops.confirm {
   opacity: 1;
 }
 .confirm-text {

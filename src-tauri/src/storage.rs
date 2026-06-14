@@ -24,8 +24,12 @@ pub struct Settings {
     pub desktop_enabled: bool,
     #[serde(rename = "desktopLocked")]
     pub desktop_locked: bool,
+    #[serde(rename = "backgroundColor", default = "default_bg_color")]
+    pub background_color: String,
     #[serde(rename = "backgroundOpacity")]
     pub background_opacity: u32,
+    #[serde(rename = "backgroundBlur", default)]
+    pub background_blur: u32,
     pub autostart: bool,
     #[serde(rename = "startMinimized")]
     pub start_minimized: bool,
@@ -42,16 +46,22 @@ pub struct Settings {
     pub theme: String,
 }
 
+fn default_bg_color() -> String {
+    "#14161c".into()
+}
+
 impl Default for Settings {
     fn default() -> Self {
         Settings {
             desktop_enabled: false,
             desktop_locked: true,
+            background_color: default_bg_color(),
             background_opacity: 0,
+            background_blur: 0,
             autostart: false,
             start_minimized: false,
             font_size: 16,
-            text_color: "light".into(),
+            text_color: "#ffffff".into(),
             text_shadow: true,
             display_format: "time-content".into(),
             expired_highlight: true,

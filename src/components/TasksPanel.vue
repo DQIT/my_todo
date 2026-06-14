@@ -72,8 +72,10 @@ async function onEdit(id: string, content: string, timeLocal: string) {
         placeholder="添加一个待办事项…"
         @keydown.enter="submit"
       />
-      <input v-model="newTime" class="input time" type="datetime-local" />
-      <button class="btn-primary" @click="submit">添加</button>
+      <div class="composer-row">
+        <input v-model="newTime" class="input time" type="datetime-local" />
+        <button class="btn-primary" @click="submit">添加</button>
+      </div>
     </div>
     <div v-if="formError" class="form-error">{{ formError }}</div>
 
@@ -134,6 +136,11 @@ async function onEdit(id: string, content: string, timeLocal: string) {
 }
 .composer {
   display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.composer-row {
+  display: flex;
   gap: var(--sp-2);
 }
 .input {
@@ -155,7 +162,8 @@ async function onEdit(id: string, content: string, timeLocal: string) {
   flex: 1;
 }
 .input.time {
-  width: 200px;
+  flex: 1;
+  min-width: 0;
 }
 .btn-primary {
   background: var(--accent);
@@ -163,6 +171,9 @@ async function onEdit(id: string, content: string, timeLocal: string) {
   border: none;
   border-radius: var(--radius-btn);
   padding: 0 var(--sp-4);
+  height: 36px;
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;

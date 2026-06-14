@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { loadAll, settings, pendingTodos } from "../store";
+import { loadAll, settings, pendingTodos, persistSettings } from "../store";
 import { api } from "../api";
 import { isExpired, formatTime } from "../utils";
 import type { Todo } from "../types";
@@ -8,6 +8,13 @@ import type { Todo } from "../types";
 const items = ref<Todo[]>([]);
 const containerRef = ref<HTMLElement | null>(null);
 const visibleCount = ref<number>(999);
+
+// 解锁态下点击锁定按钮：重新锁定（恢复鼠标穿透）
+async function lockNow() {
+  settings.desktopLocked = true;
+  await persistSettings();
+  await api.applyDesktopLock(true);
+}
 
 let unlisten: (() => void) | null = null;
 let ro: ResizeObserver | null = null;
@@ -29,12 +36,25 @@ const textLuminance = computed(() => {
 });
 const isLightText = computed(() => textLuminance.value >= 140);
 
-// 面板背景：透明度 0-100 → alpha。0 时纯浮动文字（贴合壁纸概念）。
-// 浅色文字配深背景，深色文字配浅背景，保证可读。
+// 面板背景：用户选定的背景色 + 透明度(0-100 → alpha)。0 时纯浮动文字（贴合壁纸概念）。
+// 高斯模糊作用于背景层（backdrop-filter），透出底层壁纸的磨砂质感。
+function hexToRgb(hex: string): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16) || 0;
+  const g = parseInt(h.slice(2, 4), 16) || 0;
+  const b = parseInt(h.slice(4, 6), 16) || 0;
+  return `${r}, ${g}, ${b}`;
+}
 const panelStyle = computed(() => {
   const a = settings.backgroundOpacity / 100;
-  const base = isLightText.value ? "20, 22, 28" : "248, 249, 252";
-  return { background: `rgba(${base}, ${a})` };
+  const rgb = hexToRgb(settings.backgroundColor);
+  const blur = settings.backgroundBlur;
+  const filter = blur > 0 ? `blur(${blur}px)` : "none";
+  return {
+    background: `rgba(${rgb}, ${a})`,
+    backdropFilter: filter,
+    WebkitBackdropFilter: filter,
+  };
 });
 
 const textStyle = computed(() => {
@@ -99,9 +119,17 @@ onUnmounted(() => {
       :style="panelStyle"
       :data-tauri-drag-region="unlocked ? '' : null"
     >
-      <!-- 解锁态提示：绝对定位浮层，不占布局，保证锁定/解锁时内容位置一致 -->
+      <!-- 解锁态提示与锁定按钮：绝对定位浮层，不占布局 -->
       <div v-if="unlocked" class="hint" :data-tauri-drag-region="''">
-        <span class="grip">⠿</span> 拖拽移动 · 边缘缩放
+        <span class="grip">⠿</span>
+        <span class="hint-text">拖拽移动 · 边缘缩放</span>
+        <button class="lock-btn" title="锁定（融入桌面）" @click.stop="lockNow">
+          <svg width="13" height="13" viewBox="0 0 14 14">
+            <rect x="3" y="6.2" width="8" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2" fill="none" />
+            <path d="M4.5 6.2 V4.6 a2.5 2.5 0 0 1 5 0 V6.2" stroke="currentColor" stroke-width="1.2" fill="none" />
+          </svg>
+          锁定
+        </button>
       </div>
 
       <div ref="containerRef" class="rows">
@@ -168,7 +196,7 @@ onUnmounted(() => {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.9);
   background: rgba(79, 140, 255, 0.78);
-  padding: 3px 12px;
+  padding: 3px 5px 3px 12px;
   border-radius: 999px;
   cursor: move;
   user-select: none;
@@ -177,6 +205,26 @@ onUnmounted(() => {
 }
 .grip {
   letter-spacing: -2px;
+}
+.hint-text {
+  opacity: 0.95;
+}
+.lock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 2px;
+  padding: 2px 9px;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background var(--dur-hover) var(--ease);
+}
+.lock-btn:hover {
+  background: rgba(255, 255, 255, 0.38);
 }
 .rows {
   width: 100%;

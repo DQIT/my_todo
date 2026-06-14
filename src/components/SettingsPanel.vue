@@ -2,7 +2,7 @@
 import { settings, persistSettings } from "../store";
 import { api } from "../api";
 import type { DisplayFormat, ThemeMode } from "../types";
-import { TEXT_COLOR_PRESETS } from "../types";
+import { TEXT_COLOR_PRESETS, BG_COLOR_PRESETS } from "../types";
 import { applyTheme } from "../store";
 
 // 勾选标记颜色：深色背景用白勾，浅色背景用黑勾
@@ -68,6 +68,25 @@ async function onThemeChange(v: ThemeMode) {
         </label>
       </div>
 
+      <div class="row stack">
+        <div class="label"><span>背景颜色</span></div>
+        <div class="swatches">
+          <button
+            v-for="c in BG_COLOR_PRESETS"
+            :key="c.value"
+            class="swatch"
+            :class="{ active: settings.backgroundColor.toLowerCase() === c.value }"
+            :style="{ background: c.value }"
+            :title="c.name"
+            @click="settings.backgroundColor = c.value; save()"
+          >
+            <svg v-if="settings.backgroundColor.toLowerCase() === c.value" width="12" height="12" viewBox="0 0 12 12">
+              <path d="M2.5 6.2 L5 8.5 L9.5 3.5" :stroke="checkColor(c.value)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
       <div class="row">
         <div class="label">
           <span>背景透明度</span>
@@ -80,6 +99,17 @@ async function onThemeChange(v: ThemeMode) {
       </div>
 
       <div class="row">
+        <div class="label">
+          <span>高斯模糊</span>
+          <small>{{ settings.backgroundBlur }}px · 透出壁纸磨砂质感</small>
+        </div>
+        <input
+          type="range" min="0" max="40" class="range"
+          v-model.number="settings.backgroundBlur" @change="save"
+        />
+      </div>
+
+      <div class="row">
         <div class="label"><span>字体大小</span><small>{{ settings.fontSize }}px</small></div>
         <input
           type="range" min="12" max="32" class="range"
@@ -87,7 +117,7 @@ async function onThemeChange(v: ThemeMode) {
         />
       </div>
 
-      <div class="row">
+      <div class="row stack">
         <div class="label"><span>文字颜色</span></div>
         <div class="swatches">
           <button
@@ -273,16 +303,20 @@ async function onThemeChange(v: ThemeMode) {
   color: #fff;
 }
 /* 颜色色板 */
+.row.stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-3);
+}
 .swatches {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--sp-2);
-  max-width: 220px;
-  justify-content: flex-end;
+  width: 100%;
 }
 .swatch {
-  width: 24px;
-  height: 24px;
+  flex: 1;
+  aspect-ratio: 1;
+  max-width: 30px;
   border-radius: 50%;
   border: 1px solid var(--border);
   cursor: pointer;
