@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { settings, persistSettings } from "../store";
 import { api } from "../api";
-import type { DisplayFormat, TextColorPreset, ThemeMode } from "../types";
+import type { DisplayFormat, ThemeMode } from "../types";
+import { TEXT_COLOR_PRESETS } from "../types";
 import { applyTheme } from "../store";
+
+// 勾选标记颜色：深色背景用白勾，浅色背景用黑勾
+function checkColor(hex: string): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16) || 0;
+  const g = parseInt(h.slice(2, 4), 16) || 0;
+  const b = parseInt(h.slice(4, 6), 16) || 0;
+  return 0.299 * r + 0.587 * g + 0.114 * b >= 140 ? "#16161a" : "#ffffff";
+}
 
 // 每个设置变更：持久化 + 触发对应副作用
 async function save() {
@@ -79,11 +89,20 @@ async function onThemeChange(v: ThemeMode) {
 
       <div class="row">
         <div class="label"><span>文字颜色</span></div>
-        <div class="segmented">
-          <button :class="{ active: settings.textColor === 'light' }"
-            @click="settings.textColor = 'light' as TextColorPreset; save()">浅色</button>
-          <button :class="{ active: settings.textColor === 'dark' }"
-            @click="settings.textColor = 'dark' as TextColorPreset; save()">深色</button>
+        <div class="swatches">
+          <button
+            v-for="c in TEXT_COLOR_PRESETS"
+            :key="c.value"
+            class="swatch"
+            :class="{ active: settings.textColor.toLowerCase() === c.value }"
+            :style="{ background: c.value }"
+            :title="c.name"
+            @click="settings.textColor = c.value; save()"
+          >
+            <svg v-if="settings.textColor.toLowerCase() === c.value" width="12" height="12" viewBox="0 0 12 12">
+              <path d="M2.5 6.2 L5 8.5 L9.5 3.5" :stroke="checkColor(c.value)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -252,5 +271,31 @@ async function onThemeChange(v: ThemeMode) {
 .segmented button.active {
   background: var(--accent);
   color: #fff;
+}
+/* 颜色色板 */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  max-width: 220px;
+  justify-content: flex-end;
+}
+.swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: transform var(--dur-hover) var(--ease),
+    box-shadow var(--dur-hover) var(--ease);
+}
+.swatch:hover {
+  transform: scale(1.12);
+}
+.swatch.active {
+  box-shadow: 0 0 0 2px var(--bg-window), 0 0 0 4px var(--accent);
 }
 </style>

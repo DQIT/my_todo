@@ -18,9 +18,19 @@ function refresh() {
 }
 
 const unlocked = computed(() => !settings.desktopLocked);
-const isLightText = computed(() => settings.textColor === "light");
+
+// 文字颜色亮度（0-255），用于决定阴影方向与面板背景基调
+const textLuminance = computed(() => {
+  const hex = settings.textColor.replace("#", "");
+  const r = parseInt(hex.slice(0, 2), 16) || 0;
+  const g = parseInt(hex.slice(2, 4), 16) || 0;
+  const b = parseInt(hex.slice(4, 6), 16) || 0;
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+});
+const isLightText = computed(() => textLuminance.value >= 140);
 
 // 面板背景：透明度 0-100 → alpha。0 时纯浮动文字（贴合壁纸概念）。
+// 浅色文字配深背景，深色文字配浅背景，保证可读。
 const panelStyle = computed(() => {
   const a = settings.backgroundOpacity / 100;
   const base = isLightText.value ? "20, 22, 28" : "248, 249, 252";
@@ -28,14 +38,13 @@ const panelStyle = computed(() => {
 });
 
 const textStyle = computed(() => {
-  const color = isLightText.value ? "#ffffff" : "#16161a";
   const shadow = settings.textShadow
     ? isLightText.value
       ? "0 1px 3px rgba(0,0,0,0.7)"
       : "0 1px 2px rgba(255,255,255,0.7)"
     : "none";
   return {
-    color,
+    color: settings.textColor,
     fontSize: `${settings.fontSize}px`,
     textShadow: shadow,
   };
@@ -90,7 +99,7 @@ onUnmounted(() => {
       :style="panelStyle"
       :data-tauri-drag-region="unlocked ? '' : null"
     >
-      <!-- 解锁态顶部提示条 -->
+      <!-- 解锁态提示：绝对定位浮层，不占布局，保证锁定/解锁时内容位置一致 -->
       <div v-if="unlocked" class="hint" :data-tauri-drag-region="''">
         <span class="grip">⠿</span> 拖拽移动 · 边缘缩放
       </div>
@@ -128,13 +137,12 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  padding: 0;
-}
-/* 解锁态留出 8px 边缘缩放区 */
-.layer-root.unlocked {
+  /* 始终保留 8px 边距：解锁态作为窗口边缘缩放热区，
+     锁定态为透明留白；两态一致以保证内容位置不跳动（#6） */
   padding: 8px;
 }
 .panel {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 14px;
@@ -149,18 +157,23 @@ onUnmounted(() => {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
 }
 .hint {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-content: center;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(79, 140, 255, 0.55);
-  padding: 3px 0;
-  margin: -6px -8px 10px;
-  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(79, 140, 255, 0.78);
+  padding: 3px 12px;
+  border-radius: 999px;
   cursor: move;
   user-select: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 .grip {
   letter-spacing: -2px;

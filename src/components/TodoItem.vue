@@ -198,7 +198,6 @@ function commitEdit() {
 }
 .edit-input.time {
   flex: 0 0 180px;
-  color-scheme: dark;
 }
 .ops {
   display: flex;

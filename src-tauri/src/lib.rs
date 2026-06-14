@@ -44,11 +44,32 @@ pub fn run() {
             // 托盘
             tray::build(&handle)?;
 
-            // 还原桌面层位置/大小
-            if let (Some(w), Some(b)) = (app.get_webview_window("desktop"), bounds) {
-                use tauri::{LogicalPosition, LogicalSize};
-                let _ = w.set_position(LogicalPosition::new(b.x, b.y));
-                let _ = w.set_size(LogicalSize::new(b.width, b.height));
+            // 还原桌面层位置/大小（用物理像素，与保存时一致，避免 DPI 缩放错位）。
+            // 首次无记忆、或记忆值异常（屏幕外/旧版本坏值）时，放到主显示器右上角。
+            if let Some(w) = app.get_webview_window("desktop") {
+                use tauri::{PhysicalPosition, PhysicalSize};
+                let valid = bounds.filter(|b| {
+                    b.x > -10000 && b.y > -10000 && b.width >= 120 && b.height >= 80
+                });
+                match valid {
+                    Some(b) => {
+                        let _ = w.set_size(PhysicalSize::new(b.width, b.height));
+                        let _ = w.set_position(PhysicalPosition::new(b.x, b.y));
+                    }
+                    None => {
+                        if let Ok(Some(monitor)) = w.primary_monitor() {
+                            let scale = monitor.scale_factor();
+                            let area = monitor.size();
+                            let margin = (24.0 * scale) as i32;
+                            let win_w = (340.0 * scale) as u32;
+                            let win_h = (420.0 * scale) as u32;
+                            let x = area.width as i32 - win_w as i32 - margin;
+                            let y = margin;
+                            let _ = w.set_size(PhysicalSize::new(win_w, win_h));
+                            let _ = w.set_position(PhysicalPosition::new(x.max(0), y));
+                        }
+                    }
+                }
             }
 
             // 主界面：按"启动后最小化"决定是否显示
@@ -91,7 +112,15 @@ pub fn run() {
 fn persist_desktop_bounds(window: &tauri::Window) {
     let app = window.app_handle();
     if let Some(w) = app.get_webview_window("desktop") {
+        // 隐藏的窗口位置是哨兵值（约 -32000），不要保存，否则下次还原会把窗口移出屏幕。
+        if !w.is_visible().unwrap_or(false) {
+            return;
+        }
         if let (Ok(pos), Ok(size)) = (w.outer_position(), w.inner_size()) {
+            // 物理像素 < 0 的异常值同样跳过
+            if pos.x < -10000 || pos.y < -10000 || size.width == 0 || size.height == 0 {
+                return;
+            }
             let store = app.state::<Store>();
             let mut guard = store.0.lock().unwrap();
             guard.desktop_bounds = Some(storage::DesktopBounds {

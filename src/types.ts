@@ -17,7 +17,20 @@ export interface Todo {
 
 export type ThemeMode = "system" | "dark" | "light";
 export type DisplayFormat = "content" | "time-content";
-export type TextColorPreset = "light" | "dark";
+/** 桌面层文字颜色：直接存十六进制色值 */
+export type TextColorPreset = string;
+
+/** 桌面层文字颜色预设色板 */
+export const TEXT_COLOR_PRESETS: { name: string; value: string }[] = [
+  { name: "纯白", value: "#ffffff" },
+  { name: "雾灰", value: "#d6dae2" },
+  { name: "墨黑", value: "#16161a" },
+  { name: "晴空蓝", value: "#7db5ff" },
+  { name: "薄荷绿", value: "#6fe0a8" },
+  { name: "暖阳橙", value: "#ffb066" },
+  { name: "樱粉", value: "#ff9ec4" },
+  { name: "丁香紫", value: "#b69bff" },
+];
 
 export interface Settings {
   /** 桌面悬浮层显示总开关 */
@@ -64,7 +77,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autostart: false,
   startMinimized: false,
   fontSize: 16,
-  textColor: "light",
+  textColor: "#ffffff",
   textShadow: true,
   displayFormat: "time-content",
   expiredHighlight: true,

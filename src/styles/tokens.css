@@ -36,6 +36,7 @@
 /* 暗色主题（默认） */
 :root,
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg-window: #1e1e24;
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.08);
@@ -48,6 +49,7 @@
 }
 
 :root[data-theme="light"] {
+  color-scheme: light;
   --bg-window: #f7f7fa;
   --bg-card: rgba(0, 0, 0, 0.03);
   --bg-card-hover: rgba(0, 0, 0, 0.06);

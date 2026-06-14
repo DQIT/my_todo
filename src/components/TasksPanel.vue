@@ -156,7 +156,6 @@ async function onEdit(id: string, content: string, timeLocal: string) {
 }
 .input.time {
   width: 200px;
-  color-scheme: dark;
 }
 .btn-primary {
   background: var(--accent);
