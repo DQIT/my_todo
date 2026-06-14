@@ -1,0 +1,15 @@
+# 依赖
+node_modules/
+dist/
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# 系统
+.DS_Store
+*.log
+
+# 数据备份
+*.json.bak
+*.json.tmp

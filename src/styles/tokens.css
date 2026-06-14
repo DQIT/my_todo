@@ -1,0 +1,126 @@
+/* MyToDo 设计令牌 —— 见 设计规范.md
+   简约 · 透明 · 有质感 / Win11 Fluent 暗色玻璃 */
+
+:root {
+  /* 强调色 */
+  --accent: #4f8cff;
+  --accent-hover: #6ba0ff;
+  --success: #37c871;
+  --danger: #ff6b6b;
+
+  /* 圆角 */
+  --radius-window: 12px;
+  --radius-card: 8px;
+  --radius-btn: 6px;
+  --radius-tag: 4px;
+
+  /* 间距 (8px 栅格) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+
+  /* 动效 */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-hover: 120ms;
+  --dur-switch: 180ms;
+  --dur-panel: 240ms;
+
+  /* 字体 */
+  --font: "Segoe UI Variable", "Segoe UI", "Microsoft YaHei UI", "微软雅黑",
+    system-ui, -apple-system, sans-serif;
+}
+
+/* 暗色主题（默认） */
+:root,
+:root[data-theme="dark"] {
+  --bg-window: rgba(28, 28, 34, 0.72);
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  --text-primary: #f2f3f5;
+  --text-secondary: rgba(242, 243, 245, 0.6);
+  --text-disabled: rgba(242, 243, 245, 0.35);
+  --border: rgba(255, 255, 255, 0.1);
+  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="light"] {
+  --bg-window: rgba(250, 250, 252, 0.78);
+  --bg-card: rgba(0, 0, 0, 0.03);
+  --bg-card-hover: rgba(0, 0, 0, 0.06);
+  --text-primary: #1c1c22;
+  --text-secondary: rgba(28, 28, 34, 0.55);
+  --text-disabled: rgba(28, 28, 34, 0.35);
+  --border: rgba(0, 0, 0, 0.08);
+  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.18);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --accent: #2f6fe0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* 主界面窗体：玻璃面板 */
+#app {
+  height: 100vh;
+  background: var(--bg-window);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-radius: var(--radius-window);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 桌面悬浮层 body 完全透明 */
+.desktop-body {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
