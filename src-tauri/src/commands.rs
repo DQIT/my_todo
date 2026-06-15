@@ -86,6 +86,30 @@ pub fn quit_app(app: AppHandle) {
     do_quit(&app);
 }
 
+/// 用系统默认浏览器打开外部链接（关于页的开发者/仓库/下载链接）
+#[tauri::command]
+pub fn open_url(url: String) {
+    open_external(&url);
+}
+
+#[cfg(target_os = "windows")]
+fn open_external(url: &str) {
+    // `start` 的第一个引号参数会被当作窗口标题，故传入空标题占位
+    let _ = std::process::Command::new("cmd")
+        .args(["/C", "start", "", url])
+        .spawn();
+}
+
+#[cfg(target_os = "macos")]
+fn open_external(url: &str) {
+    let _ = std::process::Command::new("open").arg(url).spawn();
+}
+
+#[cfg(all(not(target_os = "windows"), not(target_os = "macos")))]
+fn open_external(url: &str) {
+    let _ = std::process::Command::new("xdg-open").arg(url).spawn();
+}
+
 // ---------------- 共享逻辑 ----------------
 
 pub fn show_main(app: &AppHandle) {

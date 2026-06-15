@@ -30,6 +30,7 @@ pub fn run() {
             commands::show_main_window,
             commands::hide_main_window,
             commands::quit_app,
+            commands::open_url,
         ])
         .setup(|app| {
             let handle = app.handle().clone();

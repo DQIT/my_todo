@@ -1,0 +1,55 @@
+name: Build & Release
+
+# main 分支有更新时，自动在 Windows 上构建安装包并发布到 Release。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# 允许 Action 创建 Release / 上传产物
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read app version
+        id: ver
+        shell: bash
+        run: echo "version=$(node -p "require('./src-tauri/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Build app & publish release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v${{ steps.ver.outputs.version }}
+          releaseName: MyToDo v${{ steps.ver.outputs.version }}
+          releaseBody: "自动构建于 main 分支提交 ${{ github.sha }}"
+          releaseDraft: false
+          prerelease: false
