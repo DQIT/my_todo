@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyToDo · 贴在桌面上的待办清单</title>
+  <meta name="description" content="MyToDo —— 一款将待办清单像壁纸一样贴在桌面上的 Windows 桌面应用。简约、透明、有质感。免费、无广告、低占用。" />
+  <meta name="theme-color" content="#1e1e24" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MyToDo · 贴在桌面上的待办清单" />
+  <meta property="og:description" content="像壁纸一样常驻桌面的 Windows 待办清单。免费 · 无广告 · 低占用。" />
+  <meta property="og:image" content="assets/icon.png" />
+
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://api.github.com" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 背景氛围光 -->
+  <div class="bg-aurora" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="grid"></span>
+  </div>
+
+  <!-- 导航 -->
+  <header class="nav">
+    <a class="brand" href="#top">
+      <img src="assets/icon.png" alt="MyToDo 图标" width="30" height="30" />
+      <span>MyToDo</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#highlights">亮点</a>
+      <a href="#download">下载</a>
+      <a class="nav-gh" href="https://github.com/DQIT/my_todo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span>GitHub</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="pill">Windows 桌面待办 · 像壁纸一样常驻</span>
+        <h1>把待办，<br /><span class="grad">贴在桌面上</span></h1>
+        <p class="lede">
+          MyToDo 是一款半透明桌面便签式待办清单。它像壁纸一样融入你的桌面、始终置底、可鼠标穿透——
+          不抢占任何窗口，抬眼就能看到今天要做的事。
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#download">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v9.59l2.3-2.3a1 1 0 0 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42l2.3 2.3V4a1 1 0 0 1 1-1zM5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
+            免费下载
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/DQIT/my_todo" target="_blank" rel="noopener">查看源码</a>
+        </div>
+        <ul class="hero-meta">
+          <li>Windows 10 / 11</li>
+          <li class="dot">·</li>
+          <li>开源 MIT</li>
+          <li class="dot">·</li>
+          <li>无需注册</li>
+        </ul>
+      </div>
+
+      <!-- 应用预览：桌面悬浮层 mock -->
+      <div class="hero-art" aria-hidden="true">
+        <div class="desk-wallpaper">
+          <div class="layer-panel">
+            <div class="layer-head">
+              <img src="assets/icon.png" alt="" width="18" height="18" />
+              <span>今日待办</span>
+              <span class="lock">锁定 · 穿透</span>
+            </div>
+            <ul class="layer-list">
+              <li><i class="cb done"></i><s>晨会同步进度</s><time>09:30</time></li>
+              <li><i class="cb"></i>整理设计规范文档<time>14:00</time></li>
+              <li class="overdue"><i class="cb"></i>回复客户邮件<time>已过期</time></li>
+              <li><i class="cb"></i>晚上跑步 5km<time>20:00</time></li>
+              <li><i class="cb"></i>读 20 页书<time>22:30</time></li>
+            </ul>
+          </div>
+        </div>
+        <div class="art-caption">半透明 · 始终置底 · 鼠标穿透融入壁纸</div>
+      </div>
+    </section>
+
+    <!-- 功能 -->
+    <section id="features" class="section">
+      <div class="section-head">
+        <span class="eyebrow">核心功能</span>
+        <h2>两种形态，一份清单</h2>
+        <p>一个轻量主界面管理事项，一个桌面悬浮层时刻提醒。数据本地实时同步。</p>
+      </div>
+      <div class="feature-grid">
+        <article class="card feature-lg">
+          <div class="ic ic-accent">
+            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3H4V5zm0 5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9zm3 3a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7z"/></svg>
+          </div>
+          <h3>桌面悬浮层，常驻不打扰</h3>
+          <p>像便签一样贴在桌面，始终置底、可鼠标穿透融入壁纸。锁定后点击直接穿透到桌面，解锁即可拖拽、缩放、调透明度。抬眼可见，绝不挡住其他窗口。</p>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+          <h3>增删改查 · 过滤搜索</h3>
+          <p>快速记录待办与时间，按全部 / 未完成 / 已完成过滤，关键字搜索秒级定位。</p>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 8a1 1 0 0 1 1 1v3.6l2.4 1.4a1 1 0 1 1-1 1.7l-2.9-1.7A1 1 0 0 1 11 13V9a1 1 0 0 1 1-1zm0-6a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16z"/></svg></div>
+          <h3>到期提醒，过期高亮</h3>
+          <p>为事项设定时间，桌面层按时间排序；过期事项整行标红，一眼分清轻重缓急。</p>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg></div>
+          <h3>透明度 · 字色随心调</h3>
+          <p>背景透明度无级调节，文字内置 8 色预设，深浅壁纸下都清晰可读。</p>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zm3 8V7a3 3 0 1 0-6 0v3h6z"/></svg></div>
+          <h3>数据本地，原子保存</h3>
+          <p>所有事项存在本机 AppData，原子写入 + 损坏自动回退。不上传、不联网、不外泄。</p>
+        </article>
+        <article class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6v2h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2H5a2 2 0 0 1-2-2V5z"/></svg></div>
+          <h3>系统托盘 · 跟随主题</h3>
+          <p>可收进托盘后台运行，界面跟随 Windows 浅 / 深色，Fluent 玻璃质感原生贴合。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 亮点 -->
+    <section id="highlights" class="section">
+      <div class="section-head">
+        <span class="eyebrow">为什么是 MyToDo</span>
+        <h2>纯粹的工具，没有别的</h2>
+        <p>不为留存设计，不为变现妥协。下载、打开、记录，就这么简单。</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hl">
+          <div class="hl-num">¥0</div>
+          <h3>完全免费</h3>
+          <p>开源 MIT 协议，永久免费。没有会员、没有解锁、没有内购。</p>
+        </div>
+        <div class="hl">
+          <div class="hl-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M3.3 2.3 2 3.6l3 3A9 9 0 0 0 12 21a8.9 8.9 0 0 0 5.4-1.8l3 3 1.3-1.3-18.4-18.6zM12 19a7 7 0 0 1-5.6-11.2L17.2 18.6A6.9 6.9 0 0 1 12 19zm7-7a7 7 0 0 1-.6 2.8L8.2 4.6A7 7 0 0 1 19 12z"/></svg></div>
+          <h3>零广告 · 零打扰</h3>
+          <p>没有任何弹窗、推送、推荐和埋点。它只做一件事，并且做好。</p>
+        </div>
+        <div class="hl">
+          <div class="hl-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M13 2 4.1 12.5a.8.8 0 0 0 .6 1.3H11l-1 8.2 8.9-10.5a.8.8 0 0 0-.6-1.3H12z"/></svg></div>
+          <h3>极低占用</h3>
+          <p>Tauri 原生构建，复用系统 WebView2，安装包仅几 MB，内存占用远低于 Electron 应用。</p>
+        </div>
+        <div class="hl">
+          <div class="hl-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 1 3 5v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V5l-9-4zm0 2.2 7 3.1V11c0 4-2.9 7.8-7 9-4.1-1.2-7-5-7-9V6.3l7-3.1z"/></svg></div>
+          <h3>隐私优先</h3>
+          <p>纯本地存储，不联网、不登录、不收集任何数据。代码全部开源可审计。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 下载 -->
+    <section id="download" class="section download">
+      <div class="dl-card card">
+        <img src="assets/icon.png" alt="MyToDo" width="72" height="72" class="dl-icon" />
+        <h2>立即下载 MyToDo</h2>
+        <p class="dl-ver" id="dl-version">正在获取最新版本…</p>
+        <a class="btn btn-primary btn-lg" id="dl-button" href="https://github.com/DQIT/my_todo/releases/latest" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v9.59l2.3-2.3a1 1 0 0 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42l2.3 2.3V4a1 1 0 0 1 1-1zM5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
+          下载 Windows 安装包
+        </a>
+        <p class="dl-note">Windows 10 / 11 · 64 位 · NSIS 安装程序（.exe）</p>
+        <a class="dl-all" href="https://github.com/DQIT/my_todo/releases" target="_blank" rel="noopener">查看全部历史版本 →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="foot-brand">
+      <img src="assets/icon.png" alt="" width="22" height="22" />
+      <span>MyToDo</span>
+    </div>
+    <p>开源于 <a href="https://github.com/DQIT/my_todo" target="_blank" rel="noopener">GitHub</a> · MIT License · 由 DQIT 开发</p>
+    <p class="foot-tip">简约 · 透明 · 有质感</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

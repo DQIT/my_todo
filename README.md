@@ -90,5 +90,5 @@ npm run dev
 ## 数据存储
 
 事项与设置以 JSON 保存在用户 AppData 目录：
-`%APPDATA%\com.mytodo.app\mytodo-data.json`
+`%APPDATA%\top.dqit.mytodo.app\mytodo-data.json`
 采用原子写（先写 `.tmp` 再替换）；文件损坏时自动备份为 `.bak` 并回退默认值。
