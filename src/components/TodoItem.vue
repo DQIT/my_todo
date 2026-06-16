@@ -123,24 +123,51 @@ function commitEdit() {
 
 <style scoped>
 .item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--sp-3);
   background: var(--bg-card);
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   border-radius: var(--radius-card);
   padding: var(--sp-3);
+  overflow: hidden;
   transition: background var(--dur-hover) var(--ease),
-    border-color var(--dur-hover) var(--ease);
+    border-color var(--dur-hover) var(--ease),
+    transform var(--dur-hover) var(--ease);
+}
+/* 左侧强调竖条，悬停时显现，增强层次 */
+.item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-grad);
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease);
 }
 .item:hover {
   background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+  transform: translateX(2px);
+}
+.item:hover::before {
+  opacity: 0.9;
 }
 .item:hover .ops {
   opacity: 1;
 }
 .item.expired {
   border-color: rgba(255, 107, 107, 0.3);
+}
+.item.expired::before {
+  background: var(--danger);
+  opacity: 0.9;
+}
+.item.done::before {
+  background: var(--success);
 }
 .check {
   flex-shrink: 0;

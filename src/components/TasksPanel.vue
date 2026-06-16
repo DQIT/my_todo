@@ -138,15 +138,20 @@ async function onEdit(id: string, content: string, timeLocal: string) {
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
+  padding: var(--sp-3);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
 }
 .composer-row {
   display: flex;
   gap: var(--sp-2);
 }
 .input {
-  background: var(--bg-card);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-btn);
   color: var(--text-primary);
   padding: var(--sp-2) var(--sp-3);
   font-size: 14px;
@@ -166,7 +171,7 @@ async function onEdit(id: string, content: string, timeLocal: string) {
   min-width: 0;
 }
 .btn-primary {
-  background: var(--accent);
+  background: var(--accent-grad);
   color: #fff;
   border: none;
   border-radius: var(--radius-btn);
@@ -177,10 +182,16 @@ async function onEdit(id: string, content: string, timeLocal: string) {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background var(--dur-hover) var(--ease);
+  box-shadow: 0 6px 18px rgba(79, 140, 255, 0.3);
+  transition: transform var(--dur-hover) var(--ease),
+    box-shadow var(--dur-hover) var(--ease);
 }
 .btn-primary:hover {
-  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(79, 140, 255, 0.42);
+}
+.btn-primary:active {
+  transform: translateY(0);
 }
 .form-error {
   color: var(--danger);
@@ -262,14 +273,17 @@ async function onEdit(id: string, content: string, timeLocal: string) {
   color: var(--text-disabled);
 }
 .empty-icon {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--bg-card);
-  font-size: 24px;
-  color: var(--text-secondary);
+  background:
+    radial-gradient(circle at 50% 35%, rgba(79, 140, 255, 0.22), transparent 70%),
+    var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 26px;
+  color: var(--accent);
 }
 .list-enter-active,
 .list-leave-active {

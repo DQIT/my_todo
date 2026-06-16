@@ -190,12 +190,20 @@ async function onThemeChange(v: ThemeMode) {
   flex-direction: column;
   gap: var(--sp-6);
 }
+.group {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-4) var(--sp-4) var(--sp-2);
+}
 .group h3 {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: var(--sp-3);
-  letter-spacing: 0.3px;
+  color: var(--accent);
+  margin-bottom: var(--sp-2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .row {
   display: flex;
@@ -288,7 +296,7 @@ async function onThemeChange(v: ThemeMode) {
   color: var(--text-primary);
 }
 .segmented button.active {
-  background: var(--accent);
+  background: var(--accent-grad);
   color: #fff;
 }
 /* 颜色色板 */

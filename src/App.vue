@@ -92,8 +92,9 @@ onUnmounted(() => {
   right: var(--sp-3);
   bottom: -1px;
   height: 2px;
-  background: var(--accent);
+  background: var(--accent-grad);
   border-radius: 2px;
+  box-shadow: 0 0 10px rgba(79, 140, 255, 0.5);
 }
 .content {
   flex: 1;

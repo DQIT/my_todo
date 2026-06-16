@@ -20,7 +20,9 @@ async function closeToTray() {
 <template>
   <header class="titlebar" data-tauri-drag-region>
     <div class="brand" data-tauri-drag-region>
-      <span class="dot" />
+      <span class="logo">
+        <span class="logo-dot" />
+      </span>
       <span class="name">MyToDo</span>
     </div>
     <div class="actions">
@@ -45,7 +47,7 @@ async function closeToTray() {
 
 <style scoped>
 .titlebar {
-  height: 40px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,12 +60,20 @@ async function closeToTray() {
   align-items: center;
   gap: var(--sp-2);
 }
-.dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
+.logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: var(--accent-grad);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px rgba(79, 140, 255, 0.4);
+}
+.logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  background: #fff;
 }
 .name {
   font-weight: 600;
